@@ -1,30 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import { Provider } from 'react-redux';
 import ReactDOM from 'react-dom';
+import App from './components/App';
+import store from './redux/store';
 
-function App({ greetings }) {
-  return (
-    <div>
-      {greetings.map((greeting) => (
-        <>
-          <h1 key={greeting.id}>{greeting.message}</h1>
-        </>
-      ))}
-    </div>
-  );
-}
-
-function MainApp() {
-  const [greetings, setGreetings] = useState([]);
-
-  useEffect(() => {
-    fetch('/api/v1/greetings')
-      .then((response) => response.json())
-      .then((data) => {
-        setGreetings(data);
-      })
-  }, []);
-
-  return <App greetings={greetings} />;
-}
-
-ReactDOM.render(<MainApp />, document.getElementById('root'));
+ReactDOM.render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.getElementById('root')
+);
