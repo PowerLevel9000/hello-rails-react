@@ -1,15 +1,16 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
-url = "https://localhost:3000/api/v1/greetings"
+const url = "http://localhost:3000/api/v1/greetings"
 
 export const getMassages = createAsyncThunk('masseges/slice', async () => {
     const response = await fetch(url);
     const data = await response.json();
-    data;
+    console.log(data)
+    return data;
 })
 
 const initialState = {
-    massages: [],
+    massages: '',
     isLoading: false,
 }
 
@@ -20,15 +21,20 @@ const massageSlice = createSlice({
         builder.addCase(getMassages.pending, (state) => ({
             ...state,
             isLoading: true,
-        }))
-        builder.addCase(getMassages.fulfilled, (state, action) => ({
-            ...state,
-            massages: action.payload,
-            isLoading: false,
-        }))
+        }));
         builder.addCase(getMassages.rejected, (state) => ({
             ...state,
             isLoading: false,
         }))
+        builder.addCase(getMassages.fulfilled, (state, action) => {
+            console.log(action.payload)
+            return {
+                ...state,
+                massages: action.payload || [],
+                isLoading: false,
+            }
+        });
     }
 })
+
+export default massageSlice.reducer;
